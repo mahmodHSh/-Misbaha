@@ -1,4 +1,4 @@
- :root{
+  :root{
     --bg-deep:#07211f;
     --bg-mid:#0f3a3a;
     --bg-warm:#0a2e33;
@@ -59,20 +59,8 @@
     pointer-events:none;
     z-index:0;
   }
-  .orb-1{
-    width:380px; height:380px;
-    background:radial-gradient(circle, var(--gold) 0%, transparent 70%); 
-    top:-120px; right:-100px; animation:float1 16s ease-in-out infinite;
-}
-  .orb-2{
-    width:420px; 
-    height:420px; 
-    background:radial-gradient(circle, var(--orb-2-color) 0%, 
-    transparent 70%); 
-    bottom:-160px; 
-    left:-140px; 
-    animation:float2 20s ease-in-out infinite;
-}
+  .orb-1{width:380px; height:380px; background:radial-gradient(circle, var(--gold) 0%, transparent 70%); top:-120px; right:-100px; animation:float1 16s ease-in-out infinite;}
+  .orb-2{width:420px; height:420px; background:radial-gradient(circle, var(--orb-2-color) 0%, transparent 70%); bottom:-160px; left:-140px; animation:float2 20s ease-in-out infinite;}
 
   @keyframes float1{
     0%,100%{ transform:translate(0,0); }
@@ -95,6 +83,7 @@
     overflow-y:auto;
   }
 
+  /* ---- screens (home / adhkar categories / category detail) ---- */
   .screen{
     width:100%;
     max-width:420px;
@@ -330,16 +319,10 @@
     transition:all 0.2s ease;
     -webkit-tap-highlight-color:transparent;
   }
-  .icon-btn:hover{ 
-    background:var(--glass-strong); 
-    border-color:var(--glass-border); 
-}
+  .icon-btn:hover{ background:var(--glass-strong); border-color:var(--glass-border); }
+  .icon-btn svg{ width:16px; height:16px; }
 
-  .icon-btn svg{ 
-    width:16px; height:16px; 
-}
-
-
+  /* Manage-phrases button inline with chips */
   .chip.add-chip{
     background:transparent;
     border:1px dashed var(--glass-border);
@@ -347,7 +330,7 @@
     font-weight:700;
   }
 
-
+  /* ---- Modal ---- */
   .modal-overlay{
     position:fixed;
     inset:0;
@@ -483,6 +466,14 @@
     overflow-y:auto;
   }
 
+  /* On phones these wrappers are invisible (display:contents) so mobile layout
+     is completely unaffected. On large/tablet screens (see media query near
+     the end of this stylesheet) they become two real side-by-side columns. */
+  .card-col{
+    display:contents;
+  }
+
+  /* Dhikr phrase chips */
   .chips-header{
     display:flex;
     align-items:center;
@@ -566,6 +557,7 @@
     line-height:1.3;
   }
 
+  /* Bead ring */
   .ring-wrap{
     position:relative;
     width:min(190px, 46vh);
@@ -628,6 +620,7 @@
     letter-spacing:0.8px;
   }
 
+  /* progress + stats */
   .progress-wrap{
     width:100%;
   }
@@ -681,7 +674,7 @@
     margin-top:2px;
   }
 
-
+  /* ---- Side drawer ---- */
   .drawer-overlay{
     position:fixed;
     inset:0;
@@ -759,6 +752,7 @@
   .drawer-item:hover{ background:var(--glass-strong); }
   .drawer-item svg{ width:19px; height:19px; color:var(--gold-light); flex-shrink:0; }
 
+  /* ---- sequence (auto-advancing session) banner ---- */
   .sequence-banner{
     display:none;
     align-items:center;
@@ -804,6 +798,7 @@
   }
   .sequence-stop:hover{ background:var(--glass-strong); }
 
+  /* ---- sequence builder modal ---- */
   .sequence-hint{
     font-size:0.78rem;
     color:var(--ivory-dim);
@@ -843,6 +838,7 @@
     text-align:center;
   }
 
+  /* ---- toast ---- */
   .toast{
     position:fixed;
     left:50%;
@@ -923,6 +919,7 @@
     border-color:var(--gold-dim);
   }
 
+  /* ---- auto-count panel ---- */
   .auto-panel{
     width:100%;
     background:var(--glass);
@@ -1012,4 +1009,104 @@
 
   @media (prefers-reduced-motion: reduce){
     .orb, .center-btn.pulse{ animation:none !important; }
+  }
+
+  /* =========================================================
+     iPad / large tablet layout (landscape-oriented, wide screens).
+     Scoped tightly to min-width + min-height so phones — including
+     phones in landscape — are completely untouched; everything above
+     this block still governs mobile exactly as before.
+     ========================================================= */
+  @media (min-width: 900px) and (min-height: 650px){
+    .app{
+      padding:28px 40px;
+    }
+
+    header, .screen{
+      max-width:1000px;
+    }
+
+    .navbar{
+      padding:12px 22px 12px 30px;
+      gap:22px;
+    }
+    .navbar-logo svg{ width:24px; height:24px; }
+    .navbar-logo span{ font-size:1.3rem; }
+    header .tagline{ font-size:0.85rem; margin-top:7px; }
+    .icon-btn{ width:38px; height:38px; }
+    .icon-btn svg{ width:19px; height:19px; }
+
+    .card{
+      max-width:1000px;
+      flex-direction:row;
+      align-items:stretch;
+      gap:0;
+      padding:30px 34px;
+      overflow:visible;
+    }
+    .card-col{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      flex:1;
+      min-width:0;
+    }
+    .card-col-select{
+      justify-content:flex-start;
+      padding-left:28px;
+      border-left:1px solid var(--glass-border);
+    }
+    .card-col-select .chips{
+      max-height:none;
+      overflow-y:auto;
+      max-height:320px;
+    }
+    .card-col-select .current-phrase{
+      font-size:1.4rem;
+      line-height:1.7;
+      margin-top:6px;
+    }
+    .card-col-action{
+      align-items:center;
+      justify-content:center;
+      padding-right:28px;
+    }
+
+    .ring-wrap{
+      width:min(280px, 34vh);
+      margin:6px 0;
+    }
+    .count-number{ font-size:3rem; }
+    .count-label{ font-size:0.78rem; }
+
+    .chip{ font-size:0.85rem; padding:7px 15px; }
+    .chips-header span{ font-size:0.82rem; }
+
+    .progress-text{ font-size:0.75rem; }
+
+    .target-chip{ font-size:0.78rem; padding:8px 4px; }
+    .interval-chip{ font-size:0.76rem; padding:7px 4px; }
+    .btn{ font-size:0.85rem; padding:11px 10px; }
+    .auto-label{ font-size:0.8rem; }
+    .auto-play-btn{ width:36px; height:36px; }
+    .auto-play-btn svg{ width:16px; height:16px; }
+
+    footer{ max-width:600px; font-size:0.68rem; margin-top:14px; }
+
+    /* Adhkar library screens make better use of the wide viewport too */
+    .adhkar-search{ font-size:0.9rem; padding:11px 16px; }
+    .screen-title{ font-size:1.3rem; }
+    .screen-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      align-content:start;
+    }
+    #detailList{
+      display:flex;
+      grid-template-columns:none;
+    }
+    .category-card{ padding:15px 16px; }
+    .adhkar-card{ padding:18px 20px; }
+    .adhkar-card .adhkar-text{ font-size:1.1rem; }
   }

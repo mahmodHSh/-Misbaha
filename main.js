@@ -233,6 +233,32 @@
     updateBeads(s.session);
   }
 
+  // Long dhikr texts would overlap the ring below them, so we show only the
+  // first few words + an ellipsis and shrink the font a bit; tapping the
+  // text reveals the full wording in a toast.
+  const CURRENT_PHRASE_WORD_LIMIT = 6;
+  const CURRENT_PHRASE_CHAR_LIMIT = 42;
+
+  function setCurrentPhraseDisplay(fullText){
+    fullText = fullText || '';
+    const words = fullText.trim().split(/\s+/);
+    let isLong = fullText.length > CURRENT_PHRASE_CHAR_LIMIT || words.length > CURRENT_PHRASE_WORD_LIMIT;
+    let shown = fullText;
+    if(isLong){
+      shown = words.slice(0, CURRENT_PHRASE_WORD_LIMIT).join(' ') + ' …';
+    }
+    currentPhraseEl.textContent = shown;
+    currentPhraseEl.classList.toggle('long', isLong);
+    currentPhraseEl.dataset.full = fullText;
+  }
+
+  currentPhraseEl.addEventListener('click', () => {
+    const full = currentPhraseEl.dataset.full;
+    if(full && currentPhraseEl.classList.contains('long')){
+      showToast(full, 5000);
+    }
+  });
+
   function switchPhrase(id, opts){
     opts = opts || {};
     if(sequenceActive && !opts.fromSequence && id !== sequenceQueue[sequenceIndex]){
@@ -241,7 +267,7 @@
     activePhraseId = id;
     storageSet(ACTIVE_KEY, id);
     const p = PHRASES.find(p => p.id === id);
-    currentPhraseEl.textContent = p.display;
+    setCurrentPhraseDisplay(p.display);
     renderChips();
     renderCounts();
   }
@@ -669,7 +695,7 @@
         if(!val) return;
         p.label = val;
         p.display = val;
-        if(p.id === activePhraseId) currentPhraseEl.textContent = p.display;
+        if(p.id === activePhraseId) setCurrentPhraseDisplay(p.display);
         await savePhrasesList();
         renderChips();
       });
@@ -688,7 +714,7 @@
         if(activePhraseId === p.id){
           activePhraseId = PHRASES[0].id;
           storageSet(ACTIVE_KEY, activePhraseId);
-          currentPhraseEl.textContent = PHRASES[0].display;
+          setCurrentPhraseDisplay(PHRASES[0].display);
         }
         await savePhrasesList();
         renderChips();
@@ -795,7 +821,7 @@
     }
 
     const p = PHRASES.find(p => p.id === activePhraseId);
-    currentPhraseEl.textContent = p.display;
+    setCurrentPhraseDisplay(p.display);
 
     const savedChipsVisible = await storageGet(CHIPS_VISIBLE_KEY);
     setChipsVisible(savedChipsVisible !== '0');
